@@ -711,7 +711,7 @@ GET devoxx2014/_mapping
 #
 #
 
-# Nous avons vu jsuqu'à présent que le choix de l'analyseur permet
+# Nous avons vu jusqu'à présent que le choix de l'analyseur permet
 # d'améliorer la qualité de la recherche, soit en réduissant le nombre de document
 # non pertinant (bruit), soit en ellargissant la recherche.
 #
@@ -719,7 +719,7 @@ GET devoxx2014/_mapping
 # Permettent de changer les fonctionnalités apportées par la recherche.
 #
 #
-# Pour cela, nous prendrons l'exemple d'un index d'entreprise qui ressence des
+# Pour cela, nous prendrons l'exemple d'un index d'entreprise qui recense des
 # documents normatifs pour. Les services sont organisés hiérarchiquement :
 #
 # DG
