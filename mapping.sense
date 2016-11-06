@@ -65,7 +65,7 @@ GET _analyze?text=passionné&analyzer=french
 #
 
 # Suppression de l'index (risque de remonter un 404 lors de la première lecture)
-DELETE devoxx
+# DELETE devoxx
 
 # Ajouter un premier élément dans l'index.
 PUT devoxx/talk/OMZ-7895
@@ -252,8 +252,8 @@ GET devoxx/talk/_search
   "query" : {
     "bool": {
       "must": [
-        { "match": { "firstname": "Pierre" }},
-        { "match": { "lastname": "Baeli" }}
+        { "match": { "speaker.firstname": "Pierre" }},
+        { "match": { "speaker.lastname": "Baeli" }}
       ]
     }
   }
@@ -290,8 +290,8 @@ GET devoxx/talk/_search
   "query" : {
     "bool": {
       "must": [
-        { "match": { "firstname": "Pierre" }},
-        { "match": { "lastname": "Baeli" }}
+        { "match": { "speaker.firstname": "Pierre" }},
+        { "match": { "speaker.lastname": "Baeli" }}
       ]
     }
   }
@@ -379,8 +379,8 @@ GET devoxx/talk/_search
       "query": {
         "bool": {
           "must": [
-            { "match": { "firstname": "Pierre" }},
-            { "match": { "lastname": "Baeli" }}
+            { "match": { "speaker.firstname": "Pierre" }},
+            { "match": { "speaker.lastname": "Baeli" }}
           ]
         }
       }
@@ -401,8 +401,8 @@ GET devoxx/talk/_search
       "query": {
         "bool": {
           "must": [
-            { "match": { "firstname": "Pierre" }},
-            { "match": { "lastname": "Baillet" }}
+            { "match": { "speaker.firstname": "Pierre" }},
+            { "match": { "speaker.lastname": "Baillet" }}
           ]
         }
       }
@@ -424,7 +424,7 @@ GET devoxx/talk/_search
 
 # Supprimer l'index (peut échouer [404] la première fois)
 
-DELETE citations
+# DELETE citations
 
 # Ajouter une citation
 
