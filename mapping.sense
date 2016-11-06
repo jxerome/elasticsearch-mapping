@@ -123,9 +123,9 @@ PUT devoxx
   "mappings": {
     "talk": {
       "properties": {
-        "speaker": { "type" : "string" },
-        "title": { "type": "string" },
-        "salle": { "type": "string" }
+        "speaker": { "type" : "text" },
+        "title": { "type": "text" },
+        "salle": { "type": "text" }
       }
     }
   }
@@ -195,11 +195,11 @@ PUT devoxx
         "speaker": {
             "type": "object",
             "properties": {
-                "firstname": { "type": "string" },
-                "lastname": { "type": "string" }
+                "firstname": { "type": "text" },
+                "lastname": { "type": "text" }
             }
         },
-        "title": { "type": "string" }
+        "title": { "type": "text" }
       }
     }
   }
@@ -321,11 +321,11 @@ PUT devoxx
         "speaker": {
             "type": "nested",
             "properties": {
-                "firstname": { "type": "string" },
-                "lastname": { "type": "string" }
+                "firstname": { "type": "text" },
+                "lastname": { "type": "text" }
             }
         },
-        "title": { "type": "string" }
+        "title": { "type": "text" }
       }
     }
   }
@@ -489,6 +489,9 @@ GET citations/t/_search
   }
 }
 
+# Regardons le mapping créé
+
+GET citations/_mapping/t
 
 #
 # Dynamic templates.
@@ -518,7 +521,7 @@ PUT devoxx
             "match": "*-id",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "string",
+              "type": "text",
               "analyzer": "keyword"
             }
           }
@@ -528,7 +531,7 @@ PUT devoxx
             "match": "*",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "string",
+              "type": "text",
               "analyzer": "french"
             }
           }
@@ -540,21 +543,11 @@ PUT devoxx
 
 # Ajouter des données
 
-PUT devoxx/tools-in-action/TIA-006
-{
-  "talk-id": "TIA-006",
-  "talk-code": "TIA-006",
-  "speaker": "Nicolas Muller",
-  "title": "InfluxDB : la base de données chronologique OpenSource autonome"
-}
-
-PUT devoxx/tools-in-action/TIA-007
-{
-  "talk-id": "TIA-007",
-  "talk-code": "TIA-007",
-  "speaker": "Jérôme Mainaud",
-  "title": "De l'importance du mapping"
-}
+PUT devoxx/tools-in-action/_bulk
+{"index":{"_id":"TIA-006"}}
+{"talk-id":"TIA-006","talk-code":"TIA-006","speaker":"Nicolas Muller","title":"InfluxDB : la base de données chronologique OpenSource autonome"}
+{"index":{"_id":"TIA-007"}}
+{"talk-id":"TIA-007","talk-code":"TIA-007","speaker":"Jérôme Mainaud","title":"De l'importance du mapping"}
 
 # Rechercher sur le champ talk-id.
 # Le résultat est une liste exacte. Car le contenu est interprété strictement.
@@ -633,7 +626,7 @@ PUT _template/devoxx
             "match": "*-id",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "string",
+              "type": "text",
               "analyzer": "keyword"
             }
           }
@@ -643,7 +636,7 @@ PUT _template/devoxx
             "match": "*",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "string",
+              "type": "text",
               "analyzer": "french"
             }
           }
@@ -749,8 +742,8 @@ PUT normes
   "mappings": {
     "normes": {
       "properties": {
-        "titre": { "type": "string" },
-        "service": { "type": "string", "index": "not_analyzed" }
+        "titre": { "type": "text" },
+        "service": { "type": "keyword" }
       }
     }
   }
@@ -829,7 +822,7 @@ DELETE normes
 # On utilise un champ multifield pour que service soit indexé de différentes façons.
 # 1. « service » sans analyse
 # 2. « service.children »
-#    index_analyzer: path_hierarchy
+#    analyzer: path_hierarchy
 #    search_analyzer: keyword
 
 PUT normes
@@ -853,15 +846,14 @@ PUT normes
     "normes": {
       "properties": {
         "titre": {
-          "type": "string"
+          "type": "text"
         },
         "service": {
-          "type": "string",
-          "index": "not_analyzed",
+          "type": "keyword",
           "fields" : {
             "children": {
-              "type": "string",
-              "index_analyzer": "pathAnalyzer",
+              "type": "text",
+              "analyzer": "pathAnalyzer",
               "search_analyzer": "keyword"
             }
           }
@@ -943,10 +935,10 @@ DELETE normes
 # On utilise un champ multifield pour que service soit indexé de différentes façons.
 # 1. « service » sans analyse
 # 2. « service.children »
-#    index_analyzer: path_hierarchy
+#    analyzer: path_hierarchy
 #    search_analyzer: keyword
 # 3. « service.inherited »
-#    index_analyzer: keyword
+#    analyzer: keyword
 #    search_analyzer: path_hierarchy
 
 PUT normes
@@ -970,20 +962,19 @@ PUT normes
     "normes": {
       "properties": {
         "titre": {
-          "type": "string"
+          "type": "text"
         },
         "service": {
-          "type": "string",
-          "index": "not_analyzed",
+          "type": "keyword",
           "fields" : {
             "children": {
-              "type": "string",
-              "index_analyzer": "pathAnalyzer",
+              "type": "text",
+              "analyzer": "pathAnalyzer",
               "search_analyzer": "keyword"
             },
             "inherited": {
-              "type": "string",
-              "index_analyzer": "keyword",
+              "type": "text",
+              "analyzer": "keyword",
               "search_analyzer": "pathAnalyzer"
             }
           }
@@ -994,7 +985,31 @@ PUT normes
 }
 
 
-# Importer de nouveau les données en exécutant le script load-normes.
+# Importer de nouveau les données.
+
+PUT _bulk
+{"index":{"_index":"normes","_type":"normes","_id":1}}
+{"titre":"Procuration des fournitures","service":"DG"}
+{"index":{"_index":"normes","_type":"normes","_id":2}}
+{"titre":"Ouverture des accès réseau","service":"DG/DSI"}
+{"index":{"_index":"normes","_type":"normes","_id":3}}
+{"titre":"Couleur des crayons pour schemas","service":"DG/DSI/ARCHITECTURE"}
+{"index":{"_index":"normes","_type":"normes","_id":4}}
+{"titre":"Organiser une réunion avec le métier","service":"DG/DSI/ETUDES"}
+{"index":{"_index":"normes","_type":"normes","_id":5}}
+{"titre":"Interdire d'abord, autoriser jamais","service":"DG/DSI/SECURITE"}
+{"index":{"_index":"normes","_type":"normes","_id":6}}
+{"titre":"Définir les métiers entreprise","service":"DG/DRH"}
+{"index":{"_index":"normes","_type":"normes","_id":7}}
+{"titre":"Passe ton bac d'abord","service":"DG/DRH/RECRUTEMENT"}
+{"index":{"_index":"normes","_type":"normes","_id":8}}
+{"titre":"Devenir chef de projet","service":"DG/DRH/CARRIERES"}
+{"index":{"_index":"normes","_type":"normes","_id":9}}
+{"titre":"Attitude à tenir face au client","service":"DG/OPERATIONS/VENTES"}
+{"index":{"_index":"normes","_type":"normes","_id":10}}
+{"titre":"Organiser ses ventes","service":"DG/OPERATIONS/VENTES"}
+
+
 
 # La recherche sur le champ service.inherited nous donne tous les documents
 # définis par la DSI et ses parents.
@@ -1020,3 +1035,8 @@ GET normes/normes/_search
 # Merci d'avoir suivi jusqu'au bout.
 #
 #
+
+DELETE devoxx*
+DELETE _template/devoxx
+DELETE normes
+DELETE citations
