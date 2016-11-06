@@ -740,7 +740,7 @@ GET devoxx2014/_mapping
 
 # Supprimer l'index (peut échouer [404] la première fois)
 
-DELETE normes
+# DELETE normes
 
 # Créer l'index avec un mapping simple.
 
@@ -756,10 +756,29 @@ PUT normes
   }
 }
 
-# Charger les données en exécutant le script load-normes.
-# Si besoin, notamment, si vous utilisez boot2docker, changer la
-# valeur de la variable ES au début du script pour préciser le nom du
-# serveur elsaticsearch utilisé.
+# Charger les données.
+
+PUT _bulk
+{"index":{"_index":"normes","_type":"normes","_id":1}}
+{"titre":"Procuration des fournitures","service":"DG"}
+{"index":{"_index":"normes","_type":"normes","_id":2}}
+{"titre":"Ouverture des accès réseau","service":"DG/DSI"}
+{"index":{"_index":"normes","_type":"normes","_id":3}}
+{"titre":"Couleur des crayons pour schemas","service":"DG/DSI/ARCHITECTURE"}
+{"index":{"_index":"normes","_type":"normes","_id":4}}
+{"titre":"Organiser une réunion avec le métier","service":"DG/DSI/ETUDES"}
+{"index":{"_index":"normes","_type":"normes","_id":5}}
+{"titre":"Interdire d'abord, autoriser jamais","service":"DG/DSI/SECURITE"}
+{"index":{"_index":"normes","_type":"normes","_id":6}}
+{"titre":"Définir les métiers entreprise","service":"DG/DRH"}
+{"index":{"_index":"normes","_type":"normes","_id":7}}
+{"titre":"Passe ton bac d'abord","service":"DG/DRH/RECRUTEMENT"}
+{"index":{"_index":"normes","_type":"normes","_id":8}}
+{"titre":"Devenir chef de projet","service":"DG/DRH/CARRIERES"}
+{"index":{"_index":"normes","_type":"normes","_id":9}}
+{"titre":"Attitude à tenir face au client","service":"DG/OPERATIONS/VENTES"}
+{"index":{"_index":"normes","_type":"normes","_id":10}}
+{"titre":"Organiser ses ventes","service":"DG/OPERATIONS/VENTES"}
 
 # Puis vérifier que les données sont chargées.
 # La recherche doit trouver 10 éléments. (hits.total)
@@ -852,7 +871,28 @@ PUT normes
   }
 }
 
-# Importer de nouveau les données en exécutant le script load-normes.
+# Importer de nouveau les données.
+PUT _bulk
+{"index":{"_index":"normes","_type":"normes","_id":1}}
+{"titre":"Procuration des fournitures","service":"DG"}
+{"index":{"_index":"normes","_type":"normes","_id":2}}
+{"titre":"Ouverture des accès réseau","service":"DG/DSI"}
+{"index":{"_index":"normes","_type":"normes","_id":3}}
+{"titre":"Couleur des crayons pour schemas","service":"DG/DSI/ARCHITECTURE"}
+{"index":{"_index":"normes","_type":"normes","_id":4}}
+{"titre":"Organiser une réunion avec le métier","service":"DG/DSI/ETUDES"}
+{"index":{"_index":"normes","_type":"normes","_id":5}}
+{"titre":"Interdire d'abord, autoriser jamais","service":"DG/DSI/SECURITE"}
+{"index":{"_index":"normes","_type":"normes","_id":6}}
+{"titre":"Définir les métiers entreprise","service":"DG/DRH"}
+{"index":{"_index":"normes","_type":"normes","_id":7}}
+{"titre":"Passe ton bac d'abord","service":"DG/DRH/RECRUTEMENT"}
+{"index":{"_index":"normes","_type":"normes","_id":8}}
+{"titre":"Devenir chef de projet","service":"DG/DRH/CARRIERES"}
+{"index":{"_index":"normes","_type":"normes","_id":9}}
+{"titre":"Attitude à tenir face au client","service":"DG/OPERATIONS/VENTES"}
+{"index":{"_index":"normes","_type":"normes","_id":10}}
+{"titre":"Organiser ses ventes","service":"DG/OPERATIONS/VENTES"}
 
 # La recherche sur le champ service nous donne le même résultat qu'avant.
 
