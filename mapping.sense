@@ -36,11 +36,18 @@
 
 # Analyse avec l'analyseur par défaut.
 
-GET _analyze?text=Devoxx, la conférence des développeurs passionnnés.
+GET _analyze
+{
+  "text": "Devoxx, la conférence des développeurs passionnnés."
+}
 
 # Il est possible de choisir une autre analyseur comme l'analyseur « french »
 
-GET _analyze?text=Devoxx, la conférence des développeurs passionnnés.&analyzer=french
+GET _analyze
+{
+  "text": "Devoxx, la conférence des développeurs passionnnés.",
+  "analyzer": "french"
+}
 
 #
 # Lors de la recherche, l'analyseur sera joué sur les arguments puis les termes
@@ -52,12 +59,19 @@ GET _analyze?text=Devoxx, la conférence des développeurs passionnnés.&analyze
 # Analyze lors de la recherche, il n'y a pas de correspondance avec les termes
 # issus de l'indexation avec l'analyseur par défaut.
 
-GET _analyze?text=passionné
+GET _analyze
+{
+  "text": "passionné"
+}
 
 # Analyze lors de la recherche, cette fois, le terme obtenu correspond à un
 # terme de l'analyse lors de l'indexation avec l'analyseur « french » : « pasion ».
 
-GET _analyze?text=passionné&analyzer=french
+GET _analyze?text=passionn%C3%A9&analyzer=french
+{
+  "text": "passionné",
+  "analyzer": "french"
+}
 
 
 #
