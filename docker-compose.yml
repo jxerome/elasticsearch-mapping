@@ -1,12 +1,21 @@
-version: "2.0"
+version: "3.7"
 services:
   elasticsearch:
-    image: elasticsearch:5.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+    container_name: elasticsearch
+    environment:
+      - cluster.name=bbl-cluster
+#      - bootstrap.memory_lock=true
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
   kibana:
-    image: kibana:5.0
+    image: docker.elastic.co/kibana/kibana:6.4.1
     ports:
       - 5601:5601
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      ELASTISEARCH_URL: http://elasticsearch:9200
+
+volumes:
+  esdata:
